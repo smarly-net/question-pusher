@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PushAllModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PushAllUser">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PushAllUserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserTags">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="TagId" Type="int" Nullable="false" />
+        </EntityType>
+        <Function Name="GetTags" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserId" Type="nvarchar" Mode="In" />
+          <Parameter Name="IncludeImage" Type="bit" Mode="In" />
+        </Function>
+        <EntityContainer Name="PushAllModelStoreContainer">
+          <EntitySet Name="PushAllUser" EntityType="Self.PushAllUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserTags" EntityType="Self.UserTags" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PushAllModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PushAllEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="GetTags" ReturnType="Collection(PushAllModel.GetTags_Result)">
+            <Parameter Name="UserId" Mode="In" Type="String" />
+            <Parameter Name="IncludeImage" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="UserTags" EntityType="PushAllModel.UserTag" />
+          <EntitySet Name="PushAllUsers" EntityType="PushAllModel.PushAllUser" />
+        </EntityContainer>
+        <ComplexType Name="GetTags_Result">
+          <Property Type="Int32" Name="TagId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="64" />
+          <Property Type="Binary" Name="Image" Nullable="true" />
+          <Property Type="Boolean" Name="HasImage" Nullable="false" />
+          <Property Type="Boolean" Name="IsSubscribed" Nullable="false" />
+					<Property Type="Int32" Name="Subscribers" Nullable="false" />
+				</ComplexType>
+        <EntityType Name="UserTag">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="TagId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PushAllUser">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="PushAllUserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PushAllModelStoreContainer" CdmEntityContainer="PushAllEntities">
+          <FunctionImportMapping FunctionImportName="GetTags" FunctionName="PushAllModel.Store.GetTags">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PushAllModel.GetTags_Result">
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="HasImage" ColumnName="HasImage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="UserTags">
+            <EntityTypeMapping TypeName="PushAllModel.UserTag">
+              <MappingFragment StoreEntitySet="UserTags">
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PushAllUsers">
+            <EntityTypeMapping TypeName="PushAllModel.PushAllUser">
+              <MappingFragment StoreEntitySet="PushAllUser">
+                <ScalarProperty Name="PushAllUserId" ColumnName="PushAllUserId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,99 @@
+﻿body {
+	padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+	white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+	max-width: 280px;
+}
+
+form.ext-login button {
+	padding: 0;
+}
+
+.navbar-inverse {
+	background-color: #428bca;
+	border-color: #428bca;
+}
+
+	.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav > li > a {
+		color: #ffffff;
+	}
+
+.to_top {
+	position: fixed;
+	top: 0px;
+}
+
+label {
+	font-weight: normal;
+}
+
+.jumbotron {
+	padding-bottom: 20px;
+	padding-top: 20px;
+}
+
+.top-raiting {
+	font-size: 1.2em;
+}
+
+	.top-raiting input[type='checkbox'] {
+		-ms-transform: scale(1.5); /* IE */
+		-moz-transform: scale(1.5); /* FF */
+		-webkit-transform: scale(1.5); /* Safari and Chrome */
+		-o-transform: scale(1.5); /* Opera */
+		padding-right: 25px;
+	}
+
+#search {
+	margin-top: 25px;
+	margin-bottom: 35px;
+}
+
+	#search .selectem_label {
+		color: #000;
+	}
+
+	#search .selectem-items > li, .selectem_dropdown, .selectem_label {
+		border-color: #000;
+	}
+
+	#search .selectem-input {
+		max-width: initial;
+		font-size: 20px;
+	}
+
+.jumbotron {
+    background-color:#ececbb;
+}
+
+div.jumbotron img {
+	max-width: 230px;
+}
+
+div.jumbotron h2 {
+	margin-bottom: 20px;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+.navbar-brand {
+	font-size: 28px;
+}

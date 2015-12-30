@@ -1,0 +1,33 @@
+﻿@model PushAll.Web.Models.ExternalLoginConfirmationViewModel
+@{
+	ViewBag.Title = "Регистрация";
+}
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+	@Html.AntiForgeryToken()
+
+	<hr />
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<p class="text-info">
+			Вы успешно прошли аутентификацию с <strong>@ViewBag.LoginProvider</strong>.
+			Пожалуйста, проверьте  правильность данных и нажмите на кнопку окончания регистрации.
+		</p>
+		<div class="form-group">
+			@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+			<div class="col-md-10">
+				@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" class="btn btn-success" value="Окончание регистрации" />
+			</div>
+		</div>
+}
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+}

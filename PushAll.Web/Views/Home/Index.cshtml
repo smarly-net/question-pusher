@@ -1,0 +1,157 @@
+﻿@using PushAll.Web.Models
+@{
+	string disabled = !Request.IsAuthenticated ? "disabled" : string.Empty;
+}
+
+@model List<List<PushAll.Web.Data.GetTags_Result>>
+
+<div class="jumbotron">
+	<div class="row">
+		<div class="col-md-3 col-sm-6">
+			<img src="~/Content/logo.png" alt="IT вопросник" />
+		</div>
+		<div class="col-md-9 col-sm-6">
+			<h2>Добрый день!</h2>
+			@if (!Request.IsAuthenticated)
+			{
+				<p class="lead">Пройдите аутентификацию, что бы мы понимали, кому высылать пуш сообщения.</p>
+					<section id="socialLoginForm">
+						@Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+					</section>
+			}
+			else
+			{
+				<p class="lead">Выберите интересные вам теги для получения пуш сообщений.</p>
+					<section id="socialLoginForm"></section>
+			}
+			<p class="lead">Если вы еще не подписаны на пуш оповещения, <a href="https://pushall.ru/?fs=927">перейдите на PushAll.ru &raquo;</a></p>
+		</div>
+	</div>
+</div>
+
+<div class="top-raiting">
+
+	@foreach (var row in Model.Take(5))
+	{
+		<div class="row">
+			@foreach (var tag in row)
+			{
+				string isChecked = tag.IsSubscribed ? "checked" : string.Empty;
+				<div class="col-md-3 col-sm-6">
+					<div class="form-group">
+						<input type="checkbox" autocomplete="off" name="tag_@tag.TagId" id="tag_@tag.TagId" data-name="@tag.Name" @isChecked @disabled>
+
+						<label for="tag_@tag.TagId">
+							@if (tag.HasImage)
+							{
+								<img width="30" src="~/Content/ico/tag@(tag.TagId).jpeg" alt="@(tag.Name)" @disabled />
+							}
+							@tag.Name
+						</label>
+					</div>
+				</div>
+			}
+
+		</div>
+	}
+</div>
+
+<div id="search" class="row">
+	<div class="selectem col-md-6 col-md-offset-3">
+		<span class="selectem_label">Найти тег</span>
+		<div class="selectem_dropdown">
+			<input class="selectem-value" name="selectemVal" type="hidden">
+			<input class="selectem-input" name="filter" autofocus type="text" autocomplete="off" data-filter placeholder="Начните вводить">
+			<ul class="selectem-items">
+				@foreach (var row in Model)
+				{
+					foreach (var tag in row)
+					{
+				<li data-val="@(tag.Name)" data-id="tag_@tag.TagId">
+					<span class="item-avatar">
+						@if (tag.HasImage)
+								{
+						<img width="20" src="~/Content/ico/tag@(tag.TagId).jpeg" alt="@(tag.Name)" />
+								}
+								else
+								{
+						<img width="20" src="~/Content/empty.png" />
+								}
+					</span>
+					<span class="item-label">
+						@(tag.Name)
+					</span>
+				</li>
+					}
+				}
+
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="another-rating">
+	@foreach (var row in Model.Skip(5))
+	{
+		<div class="row">
+			@foreach (var tag in row)
+			{
+				string isChecked = tag.IsSubscribed ? "checked" : string.Empty;
+				<div class="col-md-3 col-sm-4">
+					<div class="form-group">
+						<input type="checkbox" autocomplete="off" name="tag_@tag.TagId" id="tag_@tag.TagId" data-name="@tag.Name" @isChecked @disabled>
+
+						<label for="tag_@tag.TagId">
+							@if (tag.HasImage)
+							{
+								<img width="20" src="~/Content/ico/tag@(tag.TagId).jpeg" alt="@(tag.Name)" @disabled />
+							}
+							@tag.Name
+						</label>
+					</div>
+				</div>
+			}
+
+		</div>
+	}
+</div>
+
+@section scripts
+{
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('div.top-raiting input[type="checkbox"], div.another-rating input[type="checkbox"]').change(function () {
+
+				var name = $(this).attr('name');
+
+				var tag = $(this).data('name');
+
+				if (name) {
+					name = name.substring('tag_'.length);
+					var id = parseInt(name);
+					var selected = $(this).is(':checked');
+
+					if (id) {
+						$.ajax({
+							type: 'POST',
+							url: '@Url.Action("Subscribe", "Home")',
+							data: { id: id, selected: selected },
+							success: function (data) {
+								$.snackbar({ content: (selected ? "Вы подписаны на '" : "Вы отписались от '") + tag + "'" });
+							},
+						});
+					}
+				}
+			});
+
+			$(".selectem").on('change', function () {
+				var selectemVal = document.querySelector('input[name="selectemVal"]');
+				var id = $(selectemVal).data('id');
+				if (id) {
+					$("html, body").animate({ scrollTop: $('#' + id).offset().top }, 1000);
+				}
+			});
+		});
+	</script>
+}
+
